@@ -1,0 +1,72 @@
+﻿@model OrderAndInvoicingSystem3.Models.Order_line_item
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Order_line_item</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrderId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GST)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GST)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Total_price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Total_price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Product_Master.Product_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Product_Master.Product_name)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

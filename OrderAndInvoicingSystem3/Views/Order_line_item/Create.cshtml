@@ -1,0 +1,180 @@
+﻿@model OrderAndInvoicingSystem3.Models.Order_line_item
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+@*<script src ="https://code.jquery.com/jquery-3.3.1.min.js"></script>*@
+
+
+<script>
+
+        $(document).ready(function () {
+          //  $("#Quantity").prop("disabled", true);
+             $("#Quantity").val(1);
+             // alert(ViewBag.OrderId);
+            $("#ProductID").val(null);
+             //alert("0");
+                    //  $('.class1, .class2').on('click', some_function); syntax
+            //$class1.add($class2).on('click', some_function);
+             $("#OrderID").add( $("#ProductID")).add($("#Quantity")).on('change', function ()
+           // $('.ProductID, .Quantity').on('change',(function ()
+                {
+               // alert("1");
+                   //if ($("#ProductID").val() != null && $("#ProductID").val() != 0)
+                   //{
+                   //   //  alert("if prod change");
+                   //     $("#Quantity").prop("disabled", false);
+                   //     // alert("if2");
+                      
+                   //    // alert("q");
+                   //    var quantity = $("#Quantity").val();
+
+                   //   //  alert(quantity);
+                      
+                   //}
+                
+
+                  // alert("ajaxupdate!!");
+                 quantity = $("#Quantity").val();
+                // var prodid = $("#ProductID").val();
+                        // alert(prodid);
+                           if ($("#Quantity").val() > 0 && $("#ProductID").val()!= "")
+                           {
+                             //  alert(quantity);
+                                var productIDoptions = {};
+
+                                productIDoptions.url = "/Order_line_item/PriceGST";
+                                productIDoptions.type = "POST";
+                                productIDoptions.data = JSON.stringify({ ProductID: $("#ProductID").val() });
+                                productIDoptions.datatype = "json";
+                                productIDoptions.contentType = "application/json";
+                                productIDoptions.success = function (GSTRateArray)
+                                {
+                                   // alert(quantity);
+                                    var Price = GSTRateArray[0] * quantity;
+                                   // alert(Price);
+                                    var GST = GSTRateArray[1] * quantity;
+                                   // alert(GST);
+                                    var totalPrice = Price + GST;
+                                   // alert(totalPrice);
+                                    $("#GST").empty();
+                                    $("#GST").val(GST);
+                                    $("#Price").empty();
+                                    $("#Price").val(Price);
+                                    $("#Total_price").empty();
+                                    $("#Total_price").val(totalPrice);
+                                   // alert("if q2");
+                                   
+                                };
+                                productIDoptions.error = function ()
+                                {
+                                    alert("Error in Getting productID!!");
+                                };
+                              // alert("before ajax!!");
+                                $.ajax(productIDoptions);
+                               console.log(productIDoptions.url);
+                           }
+                            else
+                           {
+                               // alert("Else!!");
+                                $("#GST").val(0);
+                               $("#GST").empty();
+                               // alert("Else gst!!");
+                               // $("#GST").prop("disabled", true);
+                               $("#Price").empty();
+                                $("#Price").val(0);
+                              //  $("#Price").prop("disabled", true);
+                               $("#Total_price").empty();
+                                $("#Total_price").val(0);
+                               // $("#Total_price").prop("disabled", true);
+                           }
+                
+               
+               
+                //alert("end of pro id change");
+
+            });// end of pro id change
+           //  alert("out of pro id change");
+           
+        });
+    
+</script>
+
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Order line item</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.OrderId, "Order Id", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("OrderId", ViewBag.OrderId as SelectList, "Select", htmlAttributes: new { @class = "form-control" })
+                @*@Html.EditorFor(model => model.OrderId, new { htmlAttributes = new { @class = "form-control" } })*@
+                @Html.ValidationMessageFor(model => model.OrderId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProductID, "ProductID", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("ProductID", ViewBag.productId as SelectList, "Select", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ProductID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.GST, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.GST, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.GST, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Total_price, "Total price", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Total_price, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.Total_price, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

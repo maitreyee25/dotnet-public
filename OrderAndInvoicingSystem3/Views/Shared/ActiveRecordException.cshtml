@@ -1,0 +1,24 @@
+﻿
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Active Records Exception</title>
+</head>
+<body>
+    <hgroup>
+        <h1>Oops...</h1>
+        <h2>This entity has active records. It cannot be deleted. </h2>
+    </hgroup>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+           
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</body>
+</html>

@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="OrderInvoiceSystemModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Customer_Master">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nchar" MaxLength="50" Nullable="false" />
+    <Property Name="Address" Type="nchar" MaxLength="50" />
+    <Property Name="City" Type="nchar" MaxLength="50" />
+    <Property Name="Pincode" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="ContactNumber" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="EmailId" Type="nchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CustomerId" Type="int" Nullable="false" />
+    <Property Name="Order_date" Type="date" Nullable="false" />
+    <Property Name="Scheduled_del_date" Type="date" />
+    <Property Name="Total_order_price" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Total_GST" Type="decimal" Precision="18" Scale="2" />
+  </EntityType>
+  <EntityType Name="Order_line_item">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OrderId" Type="int" Nullable="false" />
+    <Property Name="ProductID" Type="int" Nullable="false" />
+    <Property Name="Quantity" Type="int" Nullable="false" />
+    <Property Name="Price" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="GST" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="Total_price" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Product_Master">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Product_name" Type="nchar" MaxLength="50" Nullable="false" />
+    <Property Name="Category" Type="nchar" MaxLength="50" />
+    <Property Name="Rate" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="GST_rate" Type="decimal" Precision="18" Scale="2" />
+  </EntityType>
+  <Association Name="FK_Cust_Order">
+    <End Role="Customer_Master" Type="Self.Customer_Master" Multiplicity="1" />
+    <End Role="Order" Type="Self.Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer_Master">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Order">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Order_line_item_Order">
+    <End Role="Product_Master" Type="Self.Product_Master" Multiplicity="1" />
+    <End Role="Order_line_item" Type="Self.Order_line_item" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product_Master">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Order_line_item">
+        <PropertyRef Name="ProductID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="OrderInvoiceSystemModelStoreContainer">
+    <EntitySet Name="Customer_Master" EntityType="Self.Customer_Master" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Order_line_item" EntityType="Self.Order_line_item" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Product_Master" EntityType="Self.Product_Master" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Cust_Order" Association="Self.FK_Cust_Order">
+      <End Role="Customer_Master" EntitySet="Customer_Master" />
+      <End Role="Order" EntitySet="Order" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Order_line_item_Order" Association="Self.FK_Order_line_item_Order">
+      <End Role="Product_Master" EntitySet="Product_Master" />
+      <End Role="Order_line_item" EntitySet="Order_line_item" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="OrderInvoiceSystemModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Customer_Master">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="Address" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+    <Property Name="City" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+    <Property Name="Pincode" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="ContactNumber" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="EmailId" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+    <NavigationProperty Name="Orders" Relationship="Self.FK_Cust_Order" FromRole="Customer_Master" ToRole="Order" />
+  </EntityType>
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CustomerId" Type="Int32" Nullable="false" />
+    <Property Name="Order_date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Scheduled_del_date" Type="DateTime" Precision="0" />
+    <Property Name="Total_order_price" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Total_GST" Type="Decimal" Precision="18" Scale="2" />
+    <NavigationProperty Name="Customer_Master" Relationship="Self.FK_Cust_Order" FromRole="Order" ToRole="Customer_Master" />
+  </EntityType>
+  <EntityType Name="Order_line_item">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="OrderId" Type="Int32" Nullable="false" />
+    <Property Name="ProductID" Type="Int32" Nullable="false" />
+    <Property Name="Quantity" Type="Int32" Nullable="false" />
+    <Property Name="Price" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="GST" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="Total_price" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+    <NavigationProperty Name="Product_Master" Relationship="Self.FK_Order_line_item_Order" FromRole="Order_line_item" ToRole="Product_Master" />
+  </EntityType>
+  <EntityType Name="Product_Master">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Product_name" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="Category" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+    <Property Name="Rate" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="GST_rate" Type="Decimal" Precision="18" Scale="2" />
+    <NavigationProperty Name="Order_line_item" Relationship="Self.FK_Order_line_item_Order" FromRole="Product_Master" ToRole="Order_line_item" />
+  </EntityType>
+  <Association Name="FK_Cust_Order">
+    <End Role="Customer_Master" Type="Self.Customer_Master" Multiplicity="1" />
+    <End Role="Order" Type="Self.Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer_Master">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Order">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Order_line_item_Order">
+    <End Role="Product_Master" Type="Self.Product_Master" Multiplicity="1" />
+    <End Role="Order_line_item" Type="Self.Order_line_item" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product_Master">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Order_line_item">
+        <PropertyRef Name="ProductID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="OrderInvoiceSystemEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Customer_Master" EntityType="Self.Customer_Master" />
+    <EntitySet Name="Orders" EntityType="Self.Order" />
+    <EntitySet Name="Order_line_item" EntityType="Self.Order_line_item" />
+    <EntitySet Name="Product_Master" EntityType="Self.Product_Master" />
+    <AssociationSet Name="FK_Cust_Order" Association="Self.FK_Cust_Order">
+      <End Role="Customer_Master" EntitySet="Customer_Master" />
+      <End Role="Order" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Order_line_item_Order" Association="Self.FK_Order_line_item_Order">
+      <End Role="Product_Master" EntitySet="Product_Master" />
+      <End Role="Order_line_item" EntitySet="Order_line_item" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

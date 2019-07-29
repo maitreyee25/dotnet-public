@@ -1,0 +1,161 @@
+﻿@model IEnumerable<OrderAndInvoicingSystem3.Models.InvoiceOrder>
+
+@{
+    ViewBag.Title = "InvoiceOrder";
+}
+<style>
+
+    table {
+        border-collapse: collapse;
+        border: none;
+        box-shadow: none;
+    }
+
+    .bordered {
+        border: 1px solid black;
+    }
+
+    tr#t01 th {
+        background-color: black;
+        color: white;
+        padding: 15px;
+        text-align: left;
+        border: 1px solid black;
+    }
+
+    tr#03 th {
+        text-align: right;
+        padding: 15px;
+    }
+
+    tr#t01 td {
+        border: 1px solid black;
+        padding: 15px;
+        text-align: left;
+    }
+
+    tr#t04 th {
+        border: 1px solid black;
+        padding: 15px;
+        text-align: left;
+    }
+
+    td#02 {
+        border: 0px;
+    }
+
+    .noborders > td {
+        box-shadow: none;
+        border: none;
+    }
+</style>
+
+<h2>InvoiceOrder</h2>
+<p>
+    @Html.ActionLink("Invoice", "Invoice")
+</p>
+
+<table class="table">
+
+    <tr id="t04">
+        <th colspan="5">
+            Customer Name :  @ViewBag.CustomerName
+            <br />
+            Customer Address:  @ViewBag.CustomerAddress
+            @*@Html.DisplayNameFor(model => model.customer_Master.Address) :  @Html.DisplayFor(model => model.customer_Master.Address) @Html.DisplayFor(model => model.customer_Master.City) @Html.DisplayFor(model => model.customer_Master.Pincode)*@
+        </th>
+
+        <th colspan="3">
+            Order date:
+            @Convert.ToString(string.Format("{0:dd/MM/yyyy}", @ViewBag.OrderDate))
+
+            <br />
+
+            Delivery date:
+            @Convert.ToString(string.Format("{0:dd/MM/yyyy}", @ViewBag.DeliveryDate))
+            <br />
+            Bill Date:
+            @Convert.ToString(string.Format("{0:dd/MM/yyyy}", @ViewBag.BillDate))
+
+
+        </th>
+    <tr id="t01">
+        <th> Sr. No.</th>
+        <th> Product</th>
+        <th> Rate</th>
+        <th> Quantity</th>
+        <th> Value</th>
+        <th> GST Rate</th>
+        <th> GST</th>
+        <th>Total Price</th>
+    </tr>
+    @{ int SrNO = 0; }
+    @foreach (var item in Model)
+
+
+
+
+    {
+
+        <tr id="t01">
+            <td>
+                @(SrNO += 1)
+                @*using index as counter for Sr no. *@
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rate)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelpi => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelpi => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelpi => item.GST_rate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelpi => item.GST)
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelpi => item.Total_price)
+            </td>
+
+        </tr>
+
+
+    }
+    <tr>
+
+        <td class="noborders" colspan="5"> </td>
+
+        <td class="bordered"> Total GST:</td>
+        <td class="bordered" colspan="2">
+            @ViewBag.TotalGST
+            @*@Html.DisplayFor(model => model.order.Total_GST)*@
+        </td>
+
+    </tr>
+    <tr>
+
+        <td class="noborders" colspan="5"> </td>@*style='border:none'*@
+
+        <td class="bordered">Order Total:</td>
+        <td class="bordered" colspan="2">
+            @ViewBag.OrderTotal
+            @*@Html.DisplayFor(model => model.order.Total_order_price)*@
+        </td>
+
+    </tr>
+
+
+</table>
+
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>

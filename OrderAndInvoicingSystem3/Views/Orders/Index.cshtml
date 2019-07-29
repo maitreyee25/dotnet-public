@@ -1,0 +1,64 @@
+﻿@model IEnumerable<OrderAndInvoicingSystem3.Models.Order>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Orders </h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Order_date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Scheduled_del_date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Total_order_price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Total_GST)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Customer_Master.Name)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Order_date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Scheduled_del_date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Total_order_price)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Total_GST)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Customer_Master.Name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.ID }) |
+            @Html.ActionLink("Invoice", "Invoice", new { id = item.ID }) 
+        </td>
+    </tr>
+}
+
+</table>
