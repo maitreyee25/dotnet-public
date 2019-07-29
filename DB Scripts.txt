@@ -1,0 +1,111 @@
+CREATE DATABASE [OrderInvoiceSystem]
+
+USE [OrderInvoiceSystem]
+GO
+
+/****** Object:  Table [dbo].[Customer_Master]    Script Date: 29-07-2019 23:02:03 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Customer_Master](
+[ID] [int] IDENTITY(1,1) NOT NULL,
+[Name] [nchar](50) NOT NULL,
+[Address] [nchar](50) NULL,
+[City] [nchar](50) NULL,
+[Pincode] [nchar](10) NOT NULL,
+[ContactNumber] [nchar](10) NOT NULL,
+[EmailId] [nchar](50) NULL,
+ CONSTRAINT [PK_Customer_Master] PRIMARY KEY CLUSTERED
+(
+[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+USE [OrderInvoiceSystem]
+GO
+
+/****** Object:  Table [dbo].[Order]    Script Date: 29-07-2019 23:04:48 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Order](
+[ID] [int] IDENTITY(1,1) NOT NULL,
+[CustomerId] [int] NOT NULL,
+[Order_date] [date] NOT NULL,
+[Scheduled_del_date] [date] NULL,
+[Total_order_price] [decimal](18, 2) NULL,
+[Total_GST] [decimal](18, 2) NULL,
+ CONSTRAINT [PK_Order] PRIMARY KEY CLUSTERED
+(
+[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Order]  WITH CHECK ADD  CONSTRAINT [FK_Cust_Order] FOREIGN KEY([CustomerId])
+REFERENCES [dbo].[Customer_Master] ([ID])
+GO
+
+ALTER TABLE [dbo].[Order] CHECK CONSTRAINT [FK_Cust_Order]
+GO
+USE [OrderInvoiceSystem]
+GO
+
+/****** Object:  Table [dbo].[Order_line_item]    Script Date: 29-07-2019 23:05:13 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Order_line_item](
+[ID] [int] IDENTITY(1,1) NOT NULL,
+[OrderId] [int] NOT NULL,
+[ProductID] [int] NOT NULL,
+[Quantity] [int] NOT NULL,
+[Price] [decimal](18, 2) NOT NULL,
+[GST] [decimal](18, 2) NOT NULL,
+[Total_price] [decimal](18, 2) NOT NULL,
+ CONSTRAINT [PK_Order_line_item] PRIMARY KEY CLUSTERED
+(
+[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Order_line_item]  WITH CHECK ADD  CONSTRAINT [FK_Order_line_item_Order] FOREIGN KEY([ProductID])
+REFERENCES [dbo].[Product_Master] ([Id])
+GO
+
+ALTER TABLE [dbo].[Order_line_item] CHECK CONSTRAINT [FK_Order_line_item_Order]
+GO
+
+
+USE [OrderInvoiceSystem]
+GO
+
+/****** Object:  Table [dbo].[Product_Master]    Script Date: 29-07-2019 23:05:42 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Product_Master](
+[Id] [int] IDENTITY(1,1) NOT NULL,
+[Product_name] [nchar](50) NOT NULL,
+[Category] [nchar](50) NULL,
+[Rate] [decimal](18, 2) NULL,
+[GST_rate] [decimal](18, 2) NULL,
+ CONSTRAINT [PK_Product_Master] PRIMARY KEY CLUSTERED
+(
+[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
